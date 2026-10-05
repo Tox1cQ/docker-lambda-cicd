@@ -65,5 +65,15 @@ pipeline {
             }
         }
 
+        stage('Lambda Deploy') {
+            steps {
+                sh '''
+                    terraform -chdir=terraform apply \
+                    -auto-approve \
+                    -var="image_tag=${IMAGE_TAG}"
+                '''
+            }
+        }
+
     }
 }
