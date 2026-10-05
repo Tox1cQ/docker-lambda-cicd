@@ -2,6 +2,14 @@ pipeline {
 
     agent any
 
+    environment {
+        AWS_REGION = 'ap-south-1'
+        ECR_REPOSITORY = 'addition-lambda-cicd'
+        ECR_REGISTRY = '556957333990.dkr.ecr.ap-south-1.amazonaws.com'
+        IMAGE_TAG = "${BUILD_NUMBER}"
+        IMAGE_URI = "${ECR_REGISTRY}/${ECR_REPOSITORY}:${BUILD_NUMBER}"
+    }
+
     stages {
 
         stage('Checkout') {
@@ -36,28 +44,23 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t addition-lambda-cicd:1.0 .'
+                sh 'docker build -t ${ECR_REPOSITORY}:${IMAGE_TAG} .'
             }
         }
 
         stage('Docker Tag') {
             steps {
-                sh '''
-                    docker tag addition-lambda-cicd:1.0 \
-                    556957333990.dkr.ecr.ap-south-1.amazonaws.com/addition-lambda-cicd:1.0
-                '''
+                sh 'docker tag ${ECR_REPOSITORY}:${IMAGE_TAG} ${IMAGE_URI}'
             }
         }
 
         stage('Docker Push') {
             steps {
                 sh '''
-                    aws ecr get-login-password --region ap-south-1 | \
-                    docker login --username AWS --password-stdin \
-                    556957333990.dkr.ecr.ap-south-1.amazonaws.com
+                    aws ecr get-login-password --region ${AWS_REGION} | \
+                    docker login --username AWS --password-stdin ${ECR_REGISTRY}
 
-                    docker push \
-                    556957333990.dkr.ecr.ap-south-1.amazonaws.com/addition-lambda-cicd:1.0
+                    docker push ${IMAGE_URI}
                 '''
             }
         }
