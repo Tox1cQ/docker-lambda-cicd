@@ -33,6 +33,10 @@ pipeline {
                 sh 'terraform -chdir=terraform plan'
             }
         }
-
+	stage('Docker Build') {
+	    steps {
+       	        sh 'docker build -t addition-lambda-cicd:1.0 .'
     }
 }
+
+ 
