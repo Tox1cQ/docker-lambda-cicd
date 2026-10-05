@@ -1,0 +1,15 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# AWS / credentials
+.aws/
+*.pem
+
+# Environment files
+.env
+
+# Docker
+*.log
