@@ -20,7 +20,7 @@ pipeline {
 
         stage('Terraform Init') {
             steps {
-                sh 'terraform -chdir=terraform init -reconfigure'
+                sh 'terraform -chdir=terraform init -reconfigure -force-copy'
             }
         }
 
