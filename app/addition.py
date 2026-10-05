@@ -7,6 +7,7 @@ def lambda_handler(event, context):
     return {
         "statusCode": 200,
         "body": {
+            "message": "Deployed through Jenkins CI/CD!",
             "number1": number1,
             "number2": number2,
             "result": result
